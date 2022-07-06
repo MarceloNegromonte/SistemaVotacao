@@ -2,6 +2,7 @@ package com.apisistemaVotacao.sistemaVotacao.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,7 +12,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.apisistemaVotacao.sistemaVotacao.model.enums.MensagemVoto;
+import com.apisistemaVotacao.sistemaVotacao.model.enums.StatusEnum;
+import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +41,10 @@ public class Pauta {
 	@Size(min = 3)
 	private String descricao;
 	
+	@Column(name = "Status")
+	@Enumerated
+	private StatusEnum status;
+	
 	@Column(name = "QtdVotosSim")
 	private Integer qtdVotosSim = 0;
 
@@ -52,7 +58,7 @@ public class Pauta {
 	private Double percentualNao = 0.00;
 	
 	@Column(name = "Vencedor")
-	private MensagemVoto vencedor;
+	private VotoStatus vencedor;
 
 	@OneToOne
 	private SessaoVotacao sessaVotacao;
