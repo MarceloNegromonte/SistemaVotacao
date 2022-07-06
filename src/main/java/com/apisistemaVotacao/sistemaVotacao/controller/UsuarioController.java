@@ -25,7 +25,7 @@ import com.apisistemaVotacao.sistemaVotacao.repository.UsuarioRepository;
 import com.apisistemaVotacao.sistemaVotacao.service.UsuarioService;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/v1/usuario")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {
 
@@ -36,6 +36,7 @@ public class UsuarioController {
 	public UsuarioRepository usuarioRepository;
 	
 	@GetMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
 		return usuarioRepository.findById(id)
 				.map(resp -> ResponseEntity.ok(resp))
@@ -70,4 +71,7 @@ public class UsuarioController {
 		}
 		usuarioRepository.deleteById(id);
 	}
+	
+    //implementando a autenticação
+
 }

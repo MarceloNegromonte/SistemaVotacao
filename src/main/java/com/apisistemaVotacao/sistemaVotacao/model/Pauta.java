@@ -28,19 +28,20 @@ public class Pauta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Id")
 	private Long id;
-	
+
 	@Column(name = "Nome")
 	@Size(min = 3)
 	private String nome;
-	
+
 	@Column(name = "Descricao")
 	@Size(min = 3)
 	private String descricao;
-	
+
 	@OneToOne
 	private SessaoVotacao sessaVotacao;
-	
+
 	@ManyToOne
-    @JoinColumn(name = "idUsuario")
-    public Usuario usuario;
+	@JoinColumn(name = "idUsuario")
+	public Usuario usuario;
+
 }

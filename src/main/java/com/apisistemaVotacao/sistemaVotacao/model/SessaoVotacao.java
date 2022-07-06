@@ -38,7 +38,7 @@ public class SessaoVotacao {
 	private LocalDateTime dataHoraFim;
 	
 	@Column(name = "Status")
-	private boolean status;
+	private boolean status = true;
 	
 	@OneToOne
 	@JoinColumn(name = "id_pauta")

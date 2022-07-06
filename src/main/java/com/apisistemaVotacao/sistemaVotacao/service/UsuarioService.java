@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,14 +55,17 @@ public class UsuarioService {
 			Optional<Usuario> findUsuario = usuarioRepository.findByEmail(usuario.getEmail());
 			if (findUsuario.isPresent()) {
 				if (findUsuario.get().getId()!= usuario.getId()) {
+					log.error("Usuario existente");
 					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Usuario Existente",null);
 				}
 			}
 			if (!cpfService.validarCpf(usuario.getCpf())) {
+				log.error("CPF invalido");
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"CPF não é válido",null);			
 			}
 			return Optional.of(usuarioRepository.save(usuario));
 		}
+		log.error("Usuario nao encontrado");
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Usuario não encontrado",null);
 	}
 	
@@ -71,6 +75,7 @@ public class UsuarioService {
 		return passwordEncoder;
 	}
 
+	//logar usuario AUTENTICAÇÃO
 
 	
 	
