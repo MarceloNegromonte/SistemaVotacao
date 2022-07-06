@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CpfDTO {
 
-	private Long id;
 	private String cpf;
 	private Boolean isValid;
 	
