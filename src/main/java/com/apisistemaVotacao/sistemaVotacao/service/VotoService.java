@@ -1,20 +1,16 @@
 package com.apisistemaVotacao.sistemaVotacao.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.Instant;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.apisistemaVotacao.sistemaVotacao.dto.request.VotoRequisicaoDTO;
+import com.apisistemaVotacao.sistemaVotacao.dto.request.VotoRequestDTO;
 import com.apisistemaVotacao.sistemaVotacao.exception.NotFoundException;
-import com.apisistemaVotacao.sistemaVotacao.model.Pauta;
 import com.apisistemaVotacao.sistemaVotacao.model.SessaoVotacao;
 import com.apisistemaVotacao.sistemaVotacao.model.Voto;
-import com.apisistemaVotacao.sistemaVotacao.repository.PautaRepository;
 import com.apisistemaVotacao.sistemaVotacao.repository.SessaoVotacaoRepository;
 import com.apisistemaVotacao.sistemaVotacao.repository.VotoRepository;
 
@@ -28,47 +24,42 @@ public class VotoService {
 	private VotoRepository votoRepository;
 	
 	@Autowired
-	private PautaRepository pautaRepository;
-	
-	@Autowired
  	private SessaoVotacaoRepository sessaoVotacaoRepository;
 	
-    public List<Voto> findAllVotacoes() {
-    	return votoRepository.findAll();
+	@Autowired
+	private SessaoService sessaoService;
+	
+	@Autowired
+    public VotoService(VotoRepository votoRepository, SessaoVotacaoRepository sessaoVotacaoRepository, SessaoService sessaoService) {
+        this.votoRepository = votoRepository;
+        this.sessaoVotacaoRepository = sessaoVotacaoRepository;
+        this.sessaoService = sessaoService;
     }
 	
-    public Optional<Pauta> getPauta(Long id) {
-    	return pautaRepository.findById(id);
-    }
-    
-    private Optional<SessaoVotacao> getSessaoVotacao(Pauta pauta) {
-    	return sessaoVotacaoRepository.findByPauta(pauta);
-    }
-    
-    @Transactional
-    public Voto votar(Long idPauta, VotoRequisicaoDTO dto) {
-    	SessaoVotacao sessaoVotacao = getSessaoVotacao(getPauta(idPauta)
-        		.orElseThrow(() -> new NotFoundException("PAUTA_NAO_ENCONTRADA")))
-                .orElseThrow(() -> new NotFoundException("SESSAO_NAO_ENCONTRADA"));
-
-        if (LocalDateTime.now().isAfter(sessaoVotacao.getDataHoraFim())) {
-            log.error("SESSAO_FECHADA");
-        	throw new NotFoundException("SESSAO_FECHADA");
-        }
-        
-        Voto voto = Voto.builder()
-        		.cpfUsuario(dto.getCpfUsuario())
-        		.mensagemVoto(dto.getMensagemVoto())
-        		.dataHora(LocalDateTime.now())
-        		.build();
-       
-        if(votoRepository.existsBySessaoVotacaoAndCpfUsuario(sessaoVotacao, voto.getCpfUsuario())) {
-            log.error("VOTO_JA_REGISTRADO");
-        	throw new NotFoundException("VOTO_JA_REGISTRADO");
-        }
-        
-        return votoRepository.save(voto);
-    }
+	@Transactional
+	public Voto votacao(VotoRequestDTO dto) {
+		Optional<SessaoVotacao> sessaoVotacao = sessaoVotacaoRepository.findById(dto.getSessaoVotacaoId());
+		
+		if (sessaoVotacao.isEmpty()) {
+			throw new NotFoundException("Sessao votacao nao encontrada");
+		}
+		
+		Voto voto = Voto.builder()
+				.voto(dto.getVoto())
+				.votoInstant(Instant.now())
+				.sessaoVotacao(sessaoVotacao.get()).build();
+		
+		verificaSessaoVotoValidoTempo(voto);
+		
+		return votoRepository.save(voto);
+	}
+	
+	@Transactional
+	private void verificaSessaoVotoValidoTempo(Voto voto) {
+		if (voto.getVotoInstant().isAfter(voto.getSessaoVotacao().getFechado())) {
+			throw new RuntimeException("Sessao votacao expirada");
+		}
+	}
     
 }
 
