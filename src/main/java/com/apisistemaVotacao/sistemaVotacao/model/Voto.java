@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.apisistemaVotacao.sistemaVotacao.model.enums.MensagemVoto;
+import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +41,7 @@ public class Voto {
     @NotNull(message = "Mensagem de voto é obrigatório e precisa seguir o padrão: SIM/NAO")
     @Column(name = "Mensagem_voto")
     @Enumerated(EnumType.STRING)
-    private MensagemVoto mensagemVoto;
+    private VotoStatus mensagemVoto;
     
     @Column(name = "data")
     private LocalDateTime dataHora;
