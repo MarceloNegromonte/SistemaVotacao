@@ -1,5 +1,6 @@
 package com.apisistemaVotacao.sistemaVotacao.dto.request;
 
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
 import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
@@ -17,5 +18,6 @@ public class VotoRequestDTO {
 	
     //@ApiModelProperty(value = "Mensagem de voto do usuario", example = "SIM")
     @NotNull(message = "Mensagem de voto é obrigatório e precisa seguir o padrão: SIM/NAO")
+    @Enumerated
     private VotoStatus mensagemVoto;
 }
