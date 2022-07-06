@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.apisistemaVotacao.sistemaVotacao.model.dataPauta.DataPauta;
 import com.apisistemaVotacao.sistemaVotacao.model.enums.StatusEnum;
 import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
 
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_pauta")
-public class Pauta {
+public class Pauta extends DataPauta{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +45,9 @@ public class Pauta {
 	@Column(name = "Status")
 	@Enumerated
 	private StatusEnum status;
+	
+	@Column(name = "QtdVotos")
+	private Integer qtdVotos;
 	
 	@Column(name = "QtdVotosSim")
 	private Integer qtdVotosSim = 0;
