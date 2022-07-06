@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class SessaoRequisicaoDTO {
 
-	//@ApiModelProperty(value = "Data/Hora de fechamento de votação", example = "2021-07-07T18:20:21.223Z")
-    private LocalDateTime dataFechamento;
+	private Long pautaID;
+	
+	private Integer duracao;
 }
