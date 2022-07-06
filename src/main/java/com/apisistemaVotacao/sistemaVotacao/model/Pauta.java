@@ -36,6 +36,18 @@ public class Pauta {
 	@Column(name = "Descricao")
 	@Size(min = 3)
 	private String descricao;
+	
+	@Column(name = "QtdVotosSim")
+	private Integer qtdVotosSim = 0;
+
+	@Column(name = "QtdVotosNao")
+	private Integer qtdVotosNao = 0;
+
+	@Column(name = "PercentualSim")
+	private Double percentualSim = 0.00;
+
+	@Column(name = "PercentualNao")
+	private Double percentualNao = 0.00;
 
 	@OneToOne
 	private SessaoVotacao sessaVotacao;
