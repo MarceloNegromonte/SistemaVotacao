@@ -19,5 +19,5 @@ public class VotoRequestDTO {
     //@ApiModelProperty(value = "Mensagem de voto do usuario", example = "SIM")
     @NotNull(message = "Mensagem de voto é obrigatório e precisa seguir o padrão: SIM/NAO")
     @Enumerated
-    private VotoStatus mensagemVoto;
+    private VotoStatus voto;
 }
