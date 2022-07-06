@@ -35,7 +35,7 @@ public class SessaoService {
 
 	public SessaoService(SessaoVotacaoRepository sessaoRepository, PautaRepository pautaRepository,
 			PautaService pautaService) {
-        this.sessaoVotacaoRepository = sessaoVotacaoRepository;
+		this.sessaoVotacaoRepository = sessaoVotacaoRepository;
 		this.pautaRepository = pautaRepository;
 		this.pautaService = pautaService;
 	}
@@ -62,10 +62,8 @@ public class SessaoService {
 			throw new NotFoundException("Pauta nao existe");
 		}
 
-		SessaoVotacao sessaoVotacao = SessaoVotacao.builder()
-				.duracao(tempoFechado(dto.getDuracao()))
-				.pauta(buscarPauta(dto))
-				.build();
+		SessaoVotacao sessaoVotacao = SessaoVotacao.builder().duracao(tempoFechado(dto.getDuracao()))
+				.pauta(buscarPauta(dto)).build();
 
 		return sessaoVotacaoRepository.save(sessaoVotacao);
 	}
@@ -81,26 +79,29 @@ public class SessaoService {
 		return pautaRepository.findById(dto.getPautaID())
 				.orElseThrow(() -> new NotFoundException("Pauta nao encontrada"));
 	}
-	
+
 	@Transactional
 	public SessaoVotacao iniciarVotacao(SessaoStartRequestDTO dto) {
 		SessaoVotacao sessaoVotacao = sessaoVotacaoRepository.findById(dto.getSessaoId())
 				.orElseThrow(() -> new NotFoundException("Sessao votacao nao encontrada"));
-		
-		if (sessaoVotacao.getPauta().getStatus().equals(StatusEnum.valueOf("FECHADA"))) {
+
+		if (sessaoVotacao.getPauta()
+				.getStatus()
+				.equals(StatusEnum.valueOf("FECHADA"))) {
 			throw new RuntimeException("A pauta esta FECHADA");
 		}
-		
-		sessaoVotacao.setFechado(Instant.now().plus(sessaoVotacao.getDuracao(), ChronoUnit.SECONDS));
-		
+
+		sessaoVotacao.setFechado(Instant.now()
+				.plus(sessaoVotacao.getDuracao(), ChronoUnit.SECONDS));
+
 		return sessaoVotacaoRepository.save(sessaoVotacao);
 	}
-	
+
 	@Scheduled(fixedDelay = 5000)
 	@Transactional
 	public void fecharSessao() {
 		List<SessaoVotacao> listSessaoVotacao = obterVotacaoExpiradaMasNaoFechada();
-		
+
 		listSessaoVotacao.forEach(votacao -> {
 			votacao.getPauta().setQtdVotos(votacao.getVotos().size());
 			votacao.getPauta().setQtdVotosSim(qtSim(votacao));
@@ -111,62 +112,28 @@ public class SessaoService {
 			pautaService.definirVencedor(votacao.getPauta());
 		});
 	}
-	
+
 	@Transactional
 	public Integer qtSim(SessaoVotacao sessaoVotacao) {
-		return Math.toIntExact(sessaoVotacao.getVotos().stream()
-				.filter(c -> c.getVoto().equals(VotoStatus.valueOf("SIM")))
+		return Math.toIntExact(
+				sessaoVotacao.getVotos()
+				.stream()
+				.filter(c -> c.getVoto()
+				.equals(VotoStatus.valueOf("SIM")))
 				.count());
 	}
-	
+
 	@Transactional
 	public Integer qtNao(SessaoVotacao sessaoVotacao) {
-		return Math.toIntExact(sessaoVotacao.getVotos().stream()
-				.filter(c -> c.getVoto().equals(VotoStatus.valueOf("NAO")))
-				.count());
+		return Math.toIntExact(
+				sessaoVotacao.getVotos().stream().filter(c -> c.getVoto().equals(VotoStatus.valueOf("NAO"))).count());
 	}
-	
+
 	@Transactional
-    private List<SessaoVotacao> obterVotacaoExpiradaMasNaoFechada() {
-
-        return sessaoVotacaoRepository.findAll().stream().filter(
-                votingSession -> votingSession.fechada() && votingSession.aberta()
-        ).collect(Collectors.toList());
-    }
-	
-	
-	// private Optional<SessaoVotacao> buscaSessaoVotacao(Pauta pauta) {
-	// return sessaoVotacaoRepository.findByPauta(pauta);
-	// }
-
-	/*
-	 * public Integer getTempoSessaoPadrao() { return tempoSessaoPadrao; }
-	 */
-
-	/*
-	 * @Transactional public void iniciarSessaoVotacao(Long idPauta, LocalDateTime
-	 * dataFechamento) { Pauta pauta = getPauta(idPauta).orElseThrow(() -> new
-	 * NotFoundException("PAUTA_NAO_ENCONTRADA"));
-	 * 
-	 * if(Objects.requireNonNull(getSessaoVotacao(pauta)).isPresent()){ throw new
-	 * NotFoundException("SESSAO_JA_EXISTE"); }
-	 * 
-	 * criaSessaoVotacao(pauta, dataFechamento); }
-	 */
-
-	/*
-	 * private void criaSessaoVotacao(Pauta pauta, LocalDateTime dataFechamento) {
-	 * SessaoVotacao sessaoVotacao = SessaoVotacao.builder()
-	 * .dataHoraInicio(LocalDateTime.now())
-	 * .dataHoraFim(dataFechamento(dataFechamento)) .pauta(pauta) .build();
-	 * 
-	 * sessaoVotacaoRepository.save(sessaoVotacao); }
-	 */
-
-	/*
-	 * private LocalDateTime dataFechamento(LocalDateTime dataFechamento) { return
-	 * dataFechamento == null ? LocalDateTime.now().plusSeconds(tempoSessaoPadrao) :
-	 * dataFechamento; }
-	 */
+	private List<SessaoVotacao> obterVotacaoExpiradaMasNaoFechada() {
+		return sessaoVotacaoRepository.findAll().stream()
+				.filter(votingSession -> votingSession.fechada() && votingSession.aberta())
+				.collect(Collectors.toList());
+	}
 
 }

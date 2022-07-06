@@ -24,9 +24,12 @@ import com.apisistemaVotacao.sistemaVotacao.model.Usuario;
 import com.apisistemaVotacao.sistemaVotacao.repository.UsuarioRepository;
 import com.apisistemaVotacao.sistemaVotacao.service.UsuarioService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/v1/usuario")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@Slf4j
 public class UsuarioController {
 
 	@Autowired
@@ -38,6 +41,7 @@ public class UsuarioController {
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+		log.info("Buscando usuario por Id");
 		return usuarioRepository.findById(id)
 				.map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
@@ -46,6 +50,7 @@ public class UsuarioController {
 	@PostMapping("/criar")
 	@Transactional
 	public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario) {
+		log.info("Criando usuario");
 		return usuarioService.criarUsuario(usuario)
 				.map(resp -> ResponseEntity.status(HttpStatus.CREATED).body(resp))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -55,6 +60,7 @@ public class UsuarioController {
 	@PutMapping("/atualizar")
 	@Transactional
 	public ResponseEntity<Usuario> atualizarUsuario(@Valid @RequestBody Usuario usuario) {
+		log.info("Atualizando usuario");
 		return usuarioService.atualizarUsuario(usuario)
 				.map(resp -> ResponseEntity.status(HttpStatus.CREATED).body(resp))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -62,10 +68,10 @@ public class UsuarioController {
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Transactional
 	public void deletarUsuario(@PathVariable Long id) {
 		Optional<Usuario> deletarUsuario = usuarioRepository.findById(id);
+		log.info("Deletando usuario");
 		if (deletarUsuario.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}

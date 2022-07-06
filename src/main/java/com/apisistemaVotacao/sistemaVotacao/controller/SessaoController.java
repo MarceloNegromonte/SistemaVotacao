@@ -52,12 +52,13 @@ public class SessaoController {
 	
 	@PostMapping("/criar")
 	public ResponseEntity<SessaoVotacao> criarSessao(@Valid @RequestBody SessaoRequestDTO dto) {
-		
+		log.info("Criando sessao Votacao");
 		return new ResponseEntity<>(sessaoService.criarSessao(dto), HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/iniciar")
 	public ResponseEntity<SessaoVotacao> iniciarVotacao(@Valid @RequestBody SessaoStartRequestDTO dto) {
+		log.info("Iniciando sessao votacao");
 		return new ResponseEntity<>(sessaoService.iniciarVotacao(dto), HttpStatus.OK);
 	}
 

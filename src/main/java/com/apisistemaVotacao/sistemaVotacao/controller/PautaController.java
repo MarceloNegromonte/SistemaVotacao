@@ -30,68 +30,36 @@ public class PautaController {
 
 	@Autowired
 	private PautaService pautaService;
-	
+
 	@Autowired
 	public PautaController(PautaService pautaService, PautaRepository pautaRepository) {
 		this.pautaService = pautaService;
 	}
-	
+
 	@GetMapping("/todasPautas")
-	public ResponseEntity<List<Pauta>> buscarTodasPautas(){
+	public ResponseEntity<List<Pauta>> buscarTodasPautas() {
+		log.info("Buscando todas as pautas");
+
 		return ResponseEntity.ok(pautaService.buscarTodasPautas());
 	}
-	
-		@GetMapping(value = "/{id}")
-	    public ResponseEntity<PautaDTO> buscarPautaPeloID(@PathVariable("id") Long id) {
-	        log.debug("Buscando a pauta pelo ID = {}", id);
-	        
-	        return new ResponseEntity<>(pautaService.buscarPautaPeloID(id), HttpStatus.OK);
-	    }
-	
-		@GetMapping
-		public ResponseEntity<Pauta> buscaPorNome(String nome) {
-			return new ResponseEntity<>(pautaService.buscaPorNome(nome), HttpStatus.OK);
-		}
-		
-		@PostMapping("/criar")
-		public ResponseEntity<Pauta> criarPauta(@Valid @RequestBody Pauta pauta) {
-			return new ResponseEntity<>(pautaService.criarPauta(pauta), HttpStatus.CREATED);
-		}
-	
-	/*@PostMapping("/criar")
-    public ResponseEntity<PautaResponseDTO> criarPauta(@RequestBody @Valid PautaRequisicaoDTO pautaRequest) {
-        log.info("Criando pauta...");
-        Pauta pauta = objectMapper.convertValue(pautaRequest, Pauta.class);
-        pauta = pautaService.criarPauta(pauta);
-        log.info("Pauta criada com sucesso!");
 
-        ResponseEntity.ok(objectMapper.convertValue(pauta, PautaResponseDTO.class));
-		return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
-    }*/
-	
-	   
-	   
-	   /* @GetMapping(value = "/resultado")
-	    public List<PautaResponseDTO> buscarPautasComResultado() {
-	        log.info("Consultando pautas...");
-	        return pautaService.buscarPautas().stream()
-	                .map(this::getPautaResponse)
-	                .collect(Collectors.toList());
-	    }*/
-	    
-	   /* private PautaResponseDTO getPautaResponse(Pauta pauta) {
-	        PautaResponseDTO pautaResponse = objectMapper.convertValue(pauta, PautaResponseDTO.class);
-	        pautaResponse.setResultado(pautaService.resultado(pauta));
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<PautaDTO> buscarPautaPeloID(@PathVariable("id") Long id) {
+		log.info("Buscando a pauta pelo ID = {}", id);
 
-	        return pautaResponse;
-	    }*/
-	
+		return new ResponseEntity<>(pautaService.buscarPautaPeloID(id), HttpStatus.OK);
+	}
+
+	@GetMapping
+	public ResponseEntity<Pauta> buscaPorNome(String nome) {
+		log.info("Buscando pauta por nome");
+		return new ResponseEntity<>(pautaService.buscaPorNome(nome), HttpStatus.OK);
+	}
+
+	@PostMapping("/criar")
+	public ResponseEntity<Pauta> criarPauta(@Valid @RequestBody Pauta pauta) {
+		log.info("Criando Pauta");
+		return new ResponseEntity<>(pautaService.criarPauta(pauta), HttpStatus.CREATED);
+	}
+
 }
-
-//    public ResponseEntity<Pauta> criarPauta(@Valid @RequestBody Pauta pauta) {
-//log.info("Criando a pauta  = {}", pauta.getDescricao());
-//return new ResponseEntity<> (pautaService.criarPauta(pauta),
-//		HttpStatus.CREATED);
-//}
