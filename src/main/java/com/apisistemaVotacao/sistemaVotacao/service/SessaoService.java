@@ -43,7 +43,7 @@ public class SessaoService {
 	@Transactional
 	private boolean verificarExistenciaPauta(Long idPauta) {
 
-		return sessaoVotacaoRepository.existsByPautaAndId(idPauta);
+		return sessaoVotacaoRepository.existsById(idPauta);
 	}
 
 	@Transactional()
@@ -79,7 +79,7 @@ public class SessaoService {
 	@Transactional
 	private Pauta buscarPauta(SessaoRequestDTO dto) {
 		return pautaRepository.findById(dto.getPautaID())
-				.orElseThrow(() -> new RuntimeException("Pauta nao encontrada"));
+				.orElseThrow(() -> new NotFoundException("Pauta nao encontrada"));
 	}
 	
 	@Transactional
