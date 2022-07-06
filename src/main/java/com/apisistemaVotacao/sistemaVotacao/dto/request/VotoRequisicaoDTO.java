@@ -2,7 +2,7 @@ package com.apisistemaVotacao.sistemaVotacao.dto.request;
 
 import javax.validation.constraints.NotNull;
 
-import com.apisistemaVotacao.sistemaVotacao.model.enums.MensagemVoto;
+import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
 
 //import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,5 +20,5 @@ public class VotoRequisicaoDTO {
 
     //@ApiModelProperty(value = "Mensagem de voto do usuario", example = "SIM")
     @NotNull(message = "Mensagem de voto é obrigatório e precisa seguir o padrão: SIM/NAO")
-    private MensagemVoto mensagemVoto;
+    private VotoStatus mensagemVoto;
 }
