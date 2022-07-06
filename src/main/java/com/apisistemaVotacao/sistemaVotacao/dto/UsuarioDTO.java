@@ -16,6 +16,5 @@ public class UsuarioDTO {
 	private String nome;
 	private String cpf;
 	private TipoEnum tipo;
-	private String email;
-	private String token;
+	
 }
