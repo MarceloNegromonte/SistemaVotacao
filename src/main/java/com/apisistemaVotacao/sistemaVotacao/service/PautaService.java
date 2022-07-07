@@ -1,7 +1,6 @@
 package com.apisistemaVotacao.sistemaVotacao.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -11,8 +10,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.apisistemaVotacao.sistemaVotacao.dto.PautaDTO;
-import com.apisistemaVotacao.sistemaVotacao.exception.NotFoundException;
 import com.apisistemaVotacao.sistemaVotacao.model.Pauta;
 import com.apisistemaVotacao.sistemaVotacao.model.enums.StatusEnum;
 import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
@@ -35,24 +32,20 @@ public class PautaService {
 	@Cacheable(value="pautas")
     @Transactional
 	public List<Pauta> buscarTodasPautas(){
+		log.info("Buscando todas as pautas");
 		return pautaRepository.findAll();
 	}
 
 	@Cacheable(value="pautas")
     @Transactional
-    public PautaDTO buscarPautaPeloID(Long id) {
-        Optional<Pauta> pautaOptional = pautaRepository.findById(id);
-
-        if (!pautaOptional.isPresent()) {
-            log.error("Pauta não localizada para id {}", id);
-            throw new NotFoundException("Pauta não localizada para o id " + id);
-        }
-
-        return PautaDTO.toDTO(pautaOptional.get());
+    public Pauta buscarPautaPeloID(Long id){
+		log.info("Buscando pauta pelo Id {}", id);
+        return pautaRepository.findById(id).orElse(null);
     }
 	
 	@Transactional
 	public Pauta buscaPorNome(String nome) {
+		log.info("Buscando pauta por nome {}", nome);
 		return pautaRepository.findByNome(nome).orElse(null);
 	}
 	
@@ -60,7 +53,7 @@ public class PautaService {
 	@Transactional
 	public Pauta criarPauta(Pauta estado) {
 		estado.setStatus(StatusEnum.ABERTA);
-		
+		log.info("Salvando pauta");
 		return pautaRepository.save(estado);
 	}
 	
@@ -68,13 +61,14 @@ public class PautaService {
 	@Transactional
 	public void mudancaStatus(Pauta estado) {
 		estado.setStatus(StatusEnum.FECHADA);
-		
+		log.info("Salvando mudanca de pauta");
 		pautaRepository.save(estado);
 	}
 	
 	@CacheEvict(value = "pautas")
 	@Transactional
 	public void definirVencedor(Pauta pauta) {
+		log.info("Informando vencedor da pauta");
 		if (pauta.getPercentualSim() > pauta.getPercentualNao()) {
 			
 			pauta.setVencedor(VotoStatus.SIM);
@@ -86,56 +80,13 @@ public class PautaService {
 	@CacheEvict(value = "pautas")
 	@Transactional
 	public void definirPercentual(Pauta pauta) {
-        pauta.setPercentualSim(Precision.round(((
+        log.info("Definindo a porcentagem");
+		pauta.setPercentualSim(Precision.round(((
                 Double.valueOf(pauta.getQtdVotosSim())/ pauta.getQtdVotos())*100), 2));
         pauta.setPercentualNao(Precision.round(((
                 Double.valueOf(pauta.getQtdVotosNao())/ pauta.getQtdVotos())*100), 2));
-    }
-    
-	
-   /* private Optional<SessaoVotacao> buscarSessaoVotacao(Pauta pauta) {
-        return sessaoVotacaoRepository.findByPauta(pauta);
-    }*/
-    
-    /*@Transactional
-    public void votar(Long idPauta, Voto voto) {
-        SessaoVotacao sessaoVotacao = buscarSessaoVotacao(buscarPauta(idPauta)
-                .orElseThrow(() -> new NotFoundException("PAUTA_NAO_ENCONTRADA")))
-                .orElseThrow(() -> new NotFoundException("SESSAO_NAO_ENCONTRADA"));
-
-        if (LocalDateTime.now().isAfter(sessaoVotacao.getDataHoraFim())) {
-            throw new NotFoundException("SESSAO_FECHADA");
-        }
-
-        voto.setSessaoVotacao(sessaoVotacao);
-        voto.setDataHora(LocalDateTime.now());
-
-        if(votoRepository.existsBySessaoVotacaoAndCpfUsuario(sessaoVotacao, voto.getCpfUsuario())) {
-            throw new NotFoundException("VOTO_JA_REGISTRADO");
-        }
-
-        votoRepository.save(voto);
-    }*/
-    
-   /* public Map<String, Long> resultado(Pauta pauta) {
-
-        Collection<Voto> votos = buscarSessaoVotacao(pauta).isPresent() ? buscarSessaoVotacao(pauta).get().getVotos() : new ArrayList<>();
-
-        Map<String, Long> resultado = new HashMap<>();
-        resultado.put("SIM", votos.stream().filter(v -> v.getMensagemVoto().toString().equalsIgnoreCase("SIM")).count());
-        resultado.put("NAO", votos.stream().filter(v -> v.getMensagemVoto().toString().equalsIgnoreCase("NAO")).count());
-
-        return resultado;
-    }*/
-
-    /*public Integer buscarTempoSessaoPadrao() {
-        return tempoSessaoPadrao;
-    }*/
+    }	
     
 }
 
-/*	@CacheEvict(value = "pautas", allEntries = true)
-@Transactional
-public Pauta criarPauta(Pauta pauta) {
-    return pautaRepository.save(pauta);
-}*/
+

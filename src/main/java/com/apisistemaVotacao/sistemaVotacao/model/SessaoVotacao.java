@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.apisistemaVotacao.sistemaVotacao.model.dataPauta.DataPauta;
 import com.apisistemaVotacao.sistemaVotacao.model.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "tb_sessaoVotacao")
-public class SessaoVotacao {
+public class SessaoVotacao extends DataPauta {
 
 	@Id
 	@Column(name = "Id")

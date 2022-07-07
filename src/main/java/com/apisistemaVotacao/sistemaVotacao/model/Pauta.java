@@ -64,11 +64,11 @@ public class Pauta extends DataPauta{
 	@Column(name = "Vencedor")
 	private VotoStatus vencedor;
 
-	@OneToOne
+	/*@OneToOne
 	private SessaoVotacao sessaVotacao;
 
 	@ManyToOne
 	@JoinColumn(name = "idUsuario")
-	public Usuario usuario;
+	public Usuario usuario;*/
 
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apisistemaVotacao.sistemaVotacao.dto.PautaDTO;
 import com.apisistemaVotacao.sistemaVotacao.model.Pauta;
 import com.apisistemaVotacao.sistemaVotacao.repository.PautaRepository;
 import com.apisistemaVotacao.sistemaVotacao.service.PautaService;
@@ -43,12 +42,11 @@ public class PautaController {
 		return ResponseEntity.ok(pautaService.buscarTodasPautas());
 	}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<PautaDTO> buscarPautaPeloID(@PathVariable("id") Long id) {
-		log.info("Buscando a pauta pelo ID = {}", id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Pauta> getById(@PathVariable Long id){
 
-		return new ResponseEntity<>(pautaService.buscarPautaPeloID(id), HttpStatus.OK);
-	}
+        return new ResponseEntity<>(pautaService.buscarPautaPeloID(id), HttpStatus.OK);
+    }
 
 	@GetMapping
 	public ResponseEntity<Pauta> buscaPorNome(String nome) {

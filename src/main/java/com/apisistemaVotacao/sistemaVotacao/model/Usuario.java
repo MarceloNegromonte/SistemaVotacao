@@ -1,27 +1,23 @@
 package com.apisistemaVotacao.sistemaVotacao.model;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/*import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;*/
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import com.apisistemaVotacao.sistemaVotacao.model.dataPauta.DataPauta;
 import com.apisistemaVotacao.sistemaVotacao.model.enums.TipoEnum;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +31,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Usuario /*implements UserDetails*/ {
+public class Usuario extends DataPauta implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,31 +54,16 @@ public class Usuario /*implements UserDetails*/ {
 	
 	@Column(name = "Email")
 	@NotNull(message = "Insira email valido")
-	//@Email
 	private String email;
 	
 	@Column(name = "Senha")
 	@NotNull(message = "Digite a senha")
 	@Size(min = 5, max = 100)
 	private String senha;
-	
-	/*@ManyToMany(fetch = FetchType.EAGER)
-	private List<Perfil> perfis = new ArrayList<>();*/
-	
-	//@ElementCollection(fetch = FetchType.EAGER)
-    //private List<String> permissao;
-    
-    //public List<String> getPermissoes() {
-    //    return permissao;
-    //}
-
-    /*public void setPermissoes(List<String> permissoes) {
-        this.permissao = permissoes;
-    }*/
-
-	/*@Override
+		
+	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.perfis;
+		return null;
 	}
 
 	@Override
@@ -113,5 +94,5 @@ public class Usuario /*implements UserDetails*/ {
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}*/
+	}
 }

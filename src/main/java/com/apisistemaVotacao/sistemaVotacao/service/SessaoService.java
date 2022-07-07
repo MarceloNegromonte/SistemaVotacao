@@ -97,7 +97,7 @@ public class SessaoService {
 		return sessaoVotacaoRepository.save(sessaoVotacao);
 	}
 
-	@Scheduled(fixedDelay = 5000)
+	//@Scheduled(fixedDelay = 5000)
 	@Transactional
 	public void fecharSessao() {
 		List<SessaoVotacao> listSessaoVotacao = obterVotacaoExpiradaMasNaoFechada();

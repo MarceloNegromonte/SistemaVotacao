@@ -11,19 +11,21 @@ import org.springframework.stereotype.Service;
 import com.apisistemaVotacao.sistemaVotacao.model.Usuario;
 import com.apisistemaVotacao.sistemaVotacao.repository.UsuarioRepository;
 
-@Service
-public class AutenticacaoService implements UserDetailsService {
+import lombok.extern.slf4j.Slf4j;
 
-	@Autowired
+/*@Service
+@Slf4j
+public class UserDetailServiceImpl implements UserDetailsService {
+
+	@Autowired 
 	private UsuarioRepository usuarioRepository;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Usuario> usuario = usuarioRepository.findByEmail(username);
-		if (usuario.isPresent()) {
-			return usuario.get();
-		}
-		throw new UsernameNotFoundException("Dados inválidos");
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { 
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(email); 
+		log.info("Buscando email");
+		usuario.orElseThrow(() -> new UsernameNotFoundException(email + " not found."));
+	
+		return usuario.map(UserDetailsImpl::new).get();
 	}
-
-}
+}*/

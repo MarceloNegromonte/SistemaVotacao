@@ -1,7 +1,8 @@
 package com.apisistemaVotacao.sistemaVotacao.model.enums;
 
+import org.springframework.security.core.GrantedAuthority;
 
-public enum TipoEnum {
+public enum TipoEnum implements GrantedAuthority {
 
 	ADMIN("Usuario tipo Administrador"), 
 	COPERADO("Usuario tipo Coperado");
@@ -14,6 +15,11 @@ public enum TipoEnum {
 
 	public String getLabel() {
 		return label;
+	}
+
+	@Override
+	public String getAuthority() {
+		return null;
 	}
 	
 }

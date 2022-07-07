@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.apisistemaVotacao.sistemaVotacao.model.dataPauta.DataPauta;
 import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "tb_voto")
-public class Voto {
+public class Voto extends DataPauta {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
