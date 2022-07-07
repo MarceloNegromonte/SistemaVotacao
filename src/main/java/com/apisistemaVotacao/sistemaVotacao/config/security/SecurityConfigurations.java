@@ -55,6 +55,11 @@ public class SecurityConfigurations {
 	// configuracaoes de recursos estaticos(CSS, imagens, etc)
     @Bean //corrigir o caminho.
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
-    }
+        return (web) ->  web.ignoring()
+                .antMatchers("/**.html",
+                        "/v2/api-docs/**",
+                        "/webjars/**",
+                        "/configuration/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui/**");   }
 }
