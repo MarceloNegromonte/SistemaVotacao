@@ -17,7 +17,7 @@ import com.apisistemaVotacao.sistemaVotacao.controller.form.LoginForm;
 import com.apisistemaVotacao.sistemaVotacao.dto.TokenDTO;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/v1/auth")
 public class AutenticacaoController {
 
 	@Autowired
@@ -26,7 +26,7 @@ public class AutenticacaoController {
 	@Autowired
 	private TokenService tokenService;
 	
-	@PostMapping
+	@PostMapping("login")
 	public ResponseEntity<TokenDTO> autenticar(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 		

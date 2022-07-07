@@ -10,11 +10,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.apisistemaVotacao.sistemaVotacao.model.Usuario;
+import com.apisistemaVotacao.sistemaVotacao.model.enums.TipoEnum;
 import com.apisistemaVotacao.sistemaVotacao.repository.UsuarioRepository;
 
 @EnableWebSecurity
@@ -31,19 +35,30 @@ public class SecurityConfigurations {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
+    
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 	
+    public InMemoryUserDetailsManager userDetailsService(){
+        UserDetails usuario = Usuario.builder()
+                .email("admin")
+                .senha(encoder().encode("admin"))
+                .tipo(TipoEnum.ADMIN).build();
+
+        return new InMemoryUserDetailsManager(usuario);
+    }
+    
 	//configuracoes de autorizacao
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        .antMatchers(HttpMethod.GET, "/v1/pautas").permitAll()
-        .antMatchers(HttpMethod.GET, "/v1/topicos/*").permitAll()
-        .antMatchers(HttpMethod.POST, "/auth").permitAll()
+        .antMatchers(HttpMethod.GET, "/v1/pauta/*").permitAll()
+        .antMatchers(HttpMethod.GET, "/v1/sessao/*").hasRole("ADMIN")
+        .antMatchers("/v1/voto/*").hasRole("ADMIN")
+        .antMatchers("/v1/voto/voto").hasRole("COPERADO")
+        .antMatchers(HttpMethod.POST, "/v1//auth/login").permitAll()
         .anyRequest().authenticated()
         .and().csrf().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
