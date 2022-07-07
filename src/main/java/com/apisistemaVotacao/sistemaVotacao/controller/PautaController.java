@@ -43,7 +43,7 @@ public class PautaController {
 	}
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pauta> getById(@PathVariable Long id){
+    public ResponseEntity<Pauta> buscarById(@PathVariable Long id){
 
         return new ResponseEntity<>(pautaService.buscarPautaPeloID(id), HttpStatus.OK);
     }

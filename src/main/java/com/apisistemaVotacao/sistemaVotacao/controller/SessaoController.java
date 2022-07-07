@@ -39,7 +39,7 @@ public class SessaoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<SessaoVotacao> BuscaPorId(@PathVariable Long id) {
+	public ResponseEntity<SessaoVotacao> buscarPorId(@PathVariable Long id) {
 		log.info("Buscando por Id {}", id);
 		return new ResponseEntity(sessaoService.buscaPorId(id), HttpStatus.OK);
 	}
