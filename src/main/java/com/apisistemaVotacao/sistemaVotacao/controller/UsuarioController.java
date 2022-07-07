@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,13 +39,16 @@ public class UsuarioController {
 	public UsuarioRepository usuarioRepository;
 	
 	@GetMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+	public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
 		log.info("Buscando usuario por Id");
-		return usuarioRepository.findById(id)
-				.map(resp -> ResponseEntity.ok(resp))
-				.orElse(ResponseEntity.notFound().build());
+		return new ResponseEntity<>(usuarioService.buscarPorId(id), HttpStatus.OK);
 	}
+	
+    @GetMapping
+    public ResponseEntity<Usuario> buscarPorNome(@RequestParam String name){
+
+        return new ResponseEntity<>(usuarioService.buscarPorNome(name), HttpStatus.OK);
+    }
 	
 	@PostMapping("/criar")
 	@Transactional
