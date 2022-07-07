@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,16 @@ public class UsuarioService {
 		this.usuarioRepository = usuarioRepository;
 	}
 
+    public Usuario buscarPorId(Long id){
+
+        return usuarioRepository.findById(id).orElse(null);
+    }
+    
+    public Usuario buscarPorNome(String name) {
+
+        return usuarioRepository.findByNome(name).orElse(null);
+    }
+	
 	public Optional<Usuario> criarUsuario (Usuario usuario) {
 		if (usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
 			log.error("CPF ja cadastrado {}", usuario.getCpf());
@@ -69,14 +78,15 @@ public class UsuarioService {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Usuario não encontrado",null);
 	}
 	
+    public void deletaUsuario(Long id){
+
+        usuarioRepository.deleteById(id);
+    }
+	
 	public String encriptyPassword (String password) {
 		BCryptPasswordEncoder enconder = new BCryptPasswordEncoder();
 		String passwordEncoder = enconder.encode(password);
 		return passwordEncoder;
 	}
-
-	//logar usuario AUTENTICAÇÃO
-
-	
 	
 }
