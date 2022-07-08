@@ -44,7 +44,7 @@ public class PautaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Pauta> buscarById(@PathVariable Long id){
-
+    	log.info("Buscando pauta por Id {}", id);
         return new ResponseEntity<>(pautaService.buscarPautaPeloID(id), HttpStatus.OK);
     }
 
