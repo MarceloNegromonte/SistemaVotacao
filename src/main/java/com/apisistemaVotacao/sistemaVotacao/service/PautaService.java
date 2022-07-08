@@ -43,6 +43,7 @@ public class PautaService {
         return pautaRepository.findById(id).orElse(null);
     }
 	
+	@CacheEvict(value = "pautas")
 	@Transactional
 	public Pauta buscaPorNome(String nome) {
 		log.info("Buscando pauta por nome {}", nome);
@@ -69,12 +70,16 @@ public class PautaService {
 	@Transactional
 	public void definirVencedor(Pauta pauta) {
 		log.info("Informando vencedor da pauta");
-		if (pauta.getPercentualSim() > pauta.getPercentualNao()) {
-			
-			pauta.setVencedor(VotoStatus.SIM);
-		}else {
-			pauta.setVencedor(VotoStatus.NAO);
-		}
+		if (pauta.getPercentualSim() > pauta.getPercentualNao()){
+
+            pauta.setVencedor(VotoStatus.SIM.getLabel());
+        }else if(pauta.getPercentualSim() < pauta.getPercentualNao()){
+
+            pauta.setVencedor(VotoStatus.NAO.getLabel());
+        }else {
+
+            pauta.setVencedor("EMPATE");
+        }
 	}
     
 	@CacheEvict(value = "pautas")

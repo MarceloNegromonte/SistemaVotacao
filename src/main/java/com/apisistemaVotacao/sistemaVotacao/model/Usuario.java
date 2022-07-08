@@ -2,6 +2,7 @@ package com.apisistemaVotacao.sistemaVotacao.model;
 
 
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.apisistemaVotacao.sistemaVotacao.model.dataPauta.DataPauta;
@@ -63,7 +65,7 @@ public class Usuario extends DataPauta implements UserDetails {
 		
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return Collections.singletonList(new SimpleGrantedAuthority(tipo.name()));
 	}
 
 	@Override

@@ -62,13 +62,6 @@ public class Pauta extends DataPauta{
 	private Double percentualNao = 0.00;
 	
 	@Column(name = "Vencedor")
-	private VotoStatus vencedor;
-
-	/*@OneToOne
-	private SessaoVotacao sessaVotacao;
-
-	@ManyToOne
-	@JoinColumn(name = "idUsuario")
-	public Usuario usuario;*/
+	private String vencedor;
 
 }

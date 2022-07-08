@@ -7,9 +7,9 @@ public enum TipoEnum implements GrantedAuthority {
 	ADMIN("Usuario tipo Administrador"), 
 	COPERADO("Usuario tipo Coperado");
 	
-	private String label;
+	private final String label;
 
-	private TipoEnum(String label) {
+	TipoEnum(String label) {
 		this.label = label;
 	}
 

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.apisistemaVotacao.sistemaVotacao.dto.request.SessaoRequestDTO;
@@ -39,25 +40,30 @@ public class SessaoService {
 		this.pautaRepository = pautaRepository;
 		this.pautaService = pautaService;
 	}
-
+	
+	@CacheEvict(value = "sessao")
 	@Transactional
 	private boolean verificarExistenciaPauta(Long idPauta) {
 		log.info("Verificando se a pauta {} existe", idPauta);
 		return sessaoRepository.existsByIdPauta(idPauta);
 	}
-
+	
+	@CacheEvict(value = "sessao")
 	@Transactional()
 	public List<SessaoVotacao> buscarTodas() {
 		log.info("Buscando todas as pautas");
 		return sessaoRepository.findAll();
 	}
 
+	@CacheEvict(value = "sessao")
 	@Transactional
 	public Optional<Pauta> buscaPorId(Long id) {
 		log.info("Buscando pauta por Id {}", id);
 		return pautaRepository.findById(id);
 	}
 
+	
+	@CacheEvict(value = "sessao", allEntries = true)
 	@Transactional
 	public SessaoVotacao criarSessao(SessaoRequestDTO dto) {
 		if (verificarExistenciaPauta(dto.getPautaID())) {
@@ -77,12 +83,14 @@ public class SessaoService {
 		return Objects.isNull(duracao) ? 60 : duracao;
 	}
 
+	@CacheEvict(value = "sessao")
 	@Transactional
 	private Pauta buscarPauta(SessaoRequestDTO dto) {
 		return pautaRepository.findById(dto.getPautaID())
 				.orElseThrow(() -> new NotFoundException("Pauta nao encontrada"));
 	}
 
+	@CacheEvict(value = "sessao")
 	@Transactional
 	public SessaoVotacao iniciarVotacao(SessaoStartRequestDTO dto) {
 		SessaoVotacao sessaoVotacao = sessaoRepository.findById(dto.getSessaoId())

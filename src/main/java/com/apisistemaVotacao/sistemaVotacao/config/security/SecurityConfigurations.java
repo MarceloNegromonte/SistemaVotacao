@@ -25,11 +25,20 @@ import com.apisistemaVotacao.sistemaVotacao.repository.UsuarioRepository;
 @Configuration
 public class SecurityConfigurations {
 
+    String ROLE_ADMIN = "ADMIN";
+    String ROLE_COOPERATE = "COOPERATE";
+	
     @Autowired
     private TokenService tokenService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired 
+    public SecurityConfigurations(UsuarioRepository usuarioRepository, TokenService tokenService) {
+    	this.usuarioRepository = usuarioRepository;
+    	this.tokenService = tokenService;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
