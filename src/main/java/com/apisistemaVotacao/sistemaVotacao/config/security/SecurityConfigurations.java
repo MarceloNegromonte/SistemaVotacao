@@ -50,15 +50,22 @@ public class SecurityConfigurations {
         return new InMemoryUserDetailsManager(usuario);
     }
     
-	//configuracoes de autorizacao
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
         .antMatchers(HttpMethod.GET, "/v1/pauta/*").permitAll()
-        .antMatchers(HttpMethod.GET, "/v1/sessao/*").hasRole("ADMIN")
-        .antMatchers("/v1/voto/*").hasRole("ADMIN")
-        .antMatchers("/v1/voto/voto").hasRole("COPERADO")
-        .antMatchers(HttpMethod.POST, "/v1//auth/login").permitAll()
+        .antMatchers(HttpMethod.POST,"/v1/pauta/criarPauta").hasRole("ADMIN")
+        
+        .antMatchers(HttpMethod.GET, "/v1/sessao/*").permitAll()
+        .antMatchers(HttpMethod.POST,"/v1/sessao/*").hasRole("ADMIN")
+        
+        .antMatchers(HttpMethod.POST, "/v1/voto/voto").permitAll()
+        
+        .antMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
+        
+        .antMatchers(HttpMethod.POST, "/v1/usuario/criar").permitAll()
+        .antMatchers(HttpMethod.GET, "/v1/usuario/*").hasRole("ADMIN")
+
         .anyRequest().authenticated()
         .and().csrf().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -67,8 +74,7 @@ public class SecurityConfigurations {
         return http.build();
     }
 	
-	// configuracaoes de recursos estaticos(CSS, imagens, etc)
-    @Bean //corrigir o caminho.
+    @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) ->  web.ignoring()
                 .antMatchers("/**.html",
