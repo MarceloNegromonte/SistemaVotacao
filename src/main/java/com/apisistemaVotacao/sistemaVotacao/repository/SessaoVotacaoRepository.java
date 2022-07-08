@@ -10,7 +10,7 @@ import com.apisistemaVotacao.sistemaVotacao.model.SessaoVotacao;
 @Repository
 public interface SessaoVotacaoRepository extends JpaRepository<SessaoVotacao, Long> {
 
-	boolean existsById(Long idPauta);
+	boolean existsByIdPauta(Long idPauta);
 	
 	Optional<SessaoVotacao> findById(Long id);
 
