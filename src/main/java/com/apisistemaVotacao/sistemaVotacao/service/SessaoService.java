@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.apisistemaVotacao.sistemaVotacao.dto.request.SessaoRequestDTO;
@@ -23,49 +21,54 @@ import com.apisistemaVotacao.sistemaVotacao.model.enums.VotoStatus;
 import com.apisistemaVotacao.sistemaVotacao.repository.PautaRepository;
 import com.apisistemaVotacao.sistemaVotacao.repository.SessaoVotacaoRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class SessaoService {
 
 	private final PautaRepository pautaRepository;
 
 	private final PautaService pautaService;
-
-	@Autowired
-	private SessaoVotacaoRepository sessaoVotacaoRepository;
+	
+	private final SessaoVotacaoRepository sessaoRepository;
 
 	public SessaoService(SessaoVotacaoRepository sessaoRepository, PautaRepository pautaRepository,
 			PautaService pautaService) {
-		this.sessaoVotacaoRepository = sessaoVotacaoRepository;
+		this.sessaoRepository = sessaoRepository;
 		this.pautaRepository = pautaRepository;
 		this.pautaService = pautaService;
 	}
 
 	@Transactional
 	private boolean verificarExistenciaPauta(Long idPauta) {
-
-		return sessaoVotacaoRepository.existsById(idPauta);
+		log.info("Verificando se a pauta {} existe", idPauta);
+		return sessaoRepository.existsByIdPauta(idPauta);
 	}
 
 	@Transactional()
 	public List<SessaoVotacao> buscarTodas() {
-		return sessaoVotacaoRepository.findAll();
+		log.info("Buscando todas as pautas");
+		return sessaoRepository.findAll();
 	}
 
 	@Transactional
 	public Optional<Pauta> buscaPorId(Long id) {
+		log.info("Buscando pauta por Id {}", id);
 		return pautaRepository.findById(id);
 	}
 
 	@Transactional
 	public SessaoVotacao criarSessao(SessaoRequestDTO dto) {
 		if (verificarExistenciaPauta(dto.getPautaID())) {
+			log.info("Pauta nao existe");
 			throw new NotFoundException("Pauta nao existe");
 		}
 
 		SessaoVotacao sessaoVotacao = SessaoVotacao.builder().duracao(tempoFechado(dto.getDuracao()))
-				.pauta(buscarPauta(dto)).build();
-
-		return sessaoVotacaoRepository.save(sessaoVotacao);
+				.idPauta(buscarPauta(dto)).build();
+		log.info("Salvando Pauta");
+		return sessaoRepository.save(sessaoVotacao);
 	}
 
 	@Transactional
@@ -82,10 +85,10 @@ public class SessaoService {
 
 	@Transactional
 	public SessaoVotacao iniciarVotacao(SessaoStartRequestDTO dto) {
-		SessaoVotacao sessaoVotacao = sessaoVotacaoRepository.findById(dto.getSessaoId())
+		SessaoVotacao sessaoVotacao = sessaoRepository.findById(dto.getSessaoId())
 				.orElseThrow(() -> new NotFoundException("Sessao votacao nao encontrada"));
 
-		if (sessaoVotacao.getPauta()
+		if (sessaoVotacao.getIdPauta()
 				.getStatus()
 				.equals(StatusEnum.valueOf("FECHADA"))) {
 			throw new RuntimeException("A pauta esta FECHADA");
@@ -94,7 +97,7 @@ public class SessaoService {
 		sessaoVotacao.setFechado(Instant.now()
 				.plus(sessaoVotacao.getDuracao(), ChronoUnit.SECONDS));
 
-		return sessaoVotacaoRepository.save(sessaoVotacao);
+		return sessaoRepository.save(sessaoVotacao);
 	}
 
 	//@Scheduled(fixedDelay = 5000)
@@ -103,13 +106,14 @@ public class SessaoService {
 		List<SessaoVotacao> listSessaoVotacao = obterVotacaoExpiradaMasNaoFechada();
 
 		listSessaoVotacao.forEach(votacao -> {
-			votacao.getPauta().setQtdVotos(votacao.getVotos().size());
-			votacao.getPauta().setQtdVotosSim(qtSim(votacao));
-			votacao.getPauta().setQtdVotosNao(qtNao(votacao));
-			sessaoVotacaoRepository.save(votacao);
-			pautaService.mudancaStatus(votacao.getPauta());
-			pautaService.definirPercentual(votacao.getPauta());
-			pautaService.definirVencedor(votacao.getPauta());
+			log.info("Estatisticas da sessao");
+			votacao.getIdPauta().setQtdVotos(votacao.getVotos().size());
+			votacao.getIdPauta().setQtdVotosSim(qtSim(votacao));
+			votacao.getIdPauta().setQtdVotosNao(qtNao(votacao));
+			sessaoRepository.save(votacao);
+			pautaService.mudancaStatus(votacao.getIdPauta());
+			pautaService.definirPercentual(votacao.getIdPauta());
+			pautaService.definirVencedor(votacao.getIdPauta());
 		});
 	}
 
@@ -131,7 +135,7 @@ public class SessaoService {
 
 	@Transactional
 	private List<SessaoVotacao> obterVotacaoExpiradaMasNaoFechada() {
-		return sessaoVotacaoRepository.findAll().stream()
+		return sessaoRepository.findAll().stream()
 				.filter(votingSession -> votingSession.fechada() && votingSession.aberta())
 				.collect(Collectors.toList());
 	}

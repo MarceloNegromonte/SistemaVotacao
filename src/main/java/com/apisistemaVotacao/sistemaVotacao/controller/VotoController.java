@@ -32,7 +32,7 @@ public class VotoController {
 	}
 	
 	@PostMapping("/voto")
-	public ResponseEntity<Voto> criarVotacao(@Valid @RequestBody VotoRequestDTO dto) {
+	public ResponseEntity<Voto> votar(@Valid @RequestBody VotoRequestDTO dto) {
 		log.info("Voto registrado com sucesso!");
 		return new ResponseEntity<>(votoService.votacao(dto), HttpStatus.CREATED);
 	}

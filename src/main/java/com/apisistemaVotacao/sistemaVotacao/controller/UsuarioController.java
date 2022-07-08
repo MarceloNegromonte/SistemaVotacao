@@ -46,7 +46,7 @@ public class UsuarioController {
 	
     @GetMapping
     public ResponseEntity<Usuario> buscarPorNome(@RequestParam String name){
-
+    	log.info("Buscando por nome");
         return new ResponseEntity<>(usuarioService.buscarPorNome(name), HttpStatus.OK);
     }
 	
@@ -80,7 +80,5 @@ public class UsuarioController {
 		}
 		usuarioRepository.deleteById(id);
 	}
-	
-    //implementando a autenticação
 
 }

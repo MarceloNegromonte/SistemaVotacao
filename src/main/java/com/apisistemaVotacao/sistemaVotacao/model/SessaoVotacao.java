@@ -1,7 +1,6 @@
 package com.apisistemaVotacao.sistemaVotacao.model;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class SessaoVotacao extends DataPauta {
 	
 	@OneToOne
 	@JoinColumn(name = "id_pauta")
-	private Pauta pauta;
+	private Pauta idPauta;
 
 	@JsonIgnoreProperties("sessaoVotacao")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sessaoVotacao", cascade = CascadeType.ALL)
@@ -60,7 +59,7 @@ public class SessaoVotacao extends DataPauta {
 	}
 	
 	public boolean aberta() {
-		return getPauta().getStatus().equals(StatusEnum.valueOf("ABERTA"));
+		return getIdPauta().getStatus().equals(StatusEnum.valueOf("ABERTA"));
 	}
 	 
 }

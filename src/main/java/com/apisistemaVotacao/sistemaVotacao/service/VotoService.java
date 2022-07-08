@@ -41,6 +41,7 @@ public class VotoService {
 		Optional<SessaoVotacao> sessaoVotacao = sessaoVotacaoRepository.findById(dto.getSessaoVotacaoId());
 		log.info("Verificando sessao votacao");
 		if (sessaoVotacao.isEmpty()) {
+			log.info("Sessao nao encontrada");
 			throw new NotFoundException("Sessao votacao nao encontrada");
 		}
 		
@@ -51,13 +52,15 @@ public class VotoService {
 		
 		verificaSessaoVotoValidoTempo(voto);
 		
+		log.info("Salvando o voto");
 		return votoRepository.save(voto);
 	}
 	
 	@Transactional
 	private void verificaSessaoVotoValidoTempo(Voto voto) {
-		log.info("Verificando tempo sessao valida");
+		log.info("Verificando tempo valido da sessao");
 		if (voto.getVotoInstant().isAfter(voto.getSessaoVotacao().getFechado())) {
+			log.info("Sessao expirada");
 			throw new RuntimeException("Sessao votacao expirada");
 		}
 	}
