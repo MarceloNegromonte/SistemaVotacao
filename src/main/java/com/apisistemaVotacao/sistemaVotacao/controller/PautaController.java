@@ -34,8 +34,8 @@ public class PautaController {
 	public PautaController(PautaService pautaService, PautaRepository pautaRepository) {
 		this.pautaService = pautaService;
 	}
-
-	@GetMapping("/todasPautas")
+	
+	@GetMapping
 	public ResponseEntity<List<Pauta>> buscarTodasPautas() {
 		log.info("Buscando todas as pautas");
 
@@ -47,12 +47,6 @@ public class PautaController {
     	log.info("Buscando pauta por Id {}", id);
         return new ResponseEntity<>(pautaService.buscarPautaPeloID(id), HttpStatus.OK);
     }
-
-	@GetMapping
-	public ResponseEntity<Pauta> buscaPorNome(String nome) {
-		log.info("Buscando pauta por nome");
-		return new ResponseEntity<>(pautaService.buscaPorNome(nome), HttpStatus.OK);
-	}
 
 	@PostMapping("/criar")
 	public ResponseEntity<Pauta> criarPauta(@Valid @RequestBody Pauta pauta) {

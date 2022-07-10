@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Cacheable(value = "pautas", key = "#pauta.id")
 public class PautaService {
 
 	private final PautaRepository pautaRepository;
@@ -29,28 +27,18 @@ public class PautaService {
 		this.pautaRepository = pautaRepository;
 	}
 	
-	@Cacheable(value="pautas")
     @Transactional
 	public List<Pauta> buscarTodasPautas(){
 		log.info("Buscando todas as pautas");
 		return pautaRepository.findAll();
 	}
 
-	@Cacheable(value="pautas")
     @Transactional
     public Pauta buscarPautaPeloID(Long id){
 		log.info("Buscando pauta pelo Id {}", id);
         return pautaRepository.findById(id).orElse(null);
     }
 	
-	@CacheEvict(value = "pautas")
-	@Transactional
-	public Pauta buscaPorNome(String nome) {
-		log.info("Buscando pauta por nome {}", nome);
-		return pautaRepository.findByNome(nome).orElse(null);
-	}
-	
-	@CacheEvict(value = "pautas", allEntries = true)
 	@Transactional
 	public Pauta criarPauta(Pauta estado) {
 		estado.setStatus(StatusEnum.ABERTA);
@@ -58,7 +46,6 @@ public class PautaService {
 		return pautaRepository.save(estado);
 	}
 	
-	@CacheEvict(value = "pautas")
 	@Transactional
 	public void mudancaStatus(Pauta estado) {
 		estado.setStatus(StatusEnum.FECHADA);
@@ -66,7 +53,6 @@ public class PautaService {
 		pautaRepository.save(estado);
 	}
 	
-	@CacheEvict(value = "pautas")
 	@Transactional
 	public void definirVencedor(Pauta pauta) {
 		log.info("Informando vencedor da pauta");
@@ -82,7 +68,6 @@ public class PautaService {
         }
 	}
     
-	@CacheEvict(value = "pautas")
 	@Transactional
 	public void definirPercentual(Pauta pauta) {
         log.info("Definindo a porcentagem");

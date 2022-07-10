@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.apisistemaVotacao.sistemaVotacao.dto.request.SessaoRequestDTO;
@@ -41,38 +41,38 @@ public class SessaoService {
 		this.pautaService = pautaService;
 	}
 	
-	@CacheEvict(value = "sessao")
 	@Transactional
 	private boolean verificarExistenciaPauta(Long idPauta) {
 		log.info("Verificando se a pauta {} existe", idPauta);
-		return sessaoRepository.existsByIdPauta(idPauta);
+		System.out.println("verificando existencia");
+		return sessaoRepository.existsByPautaId(idPauta);
 	}
 	
-	@CacheEvict(value = "sessao")
 	@Transactional()
 	public List<SessaoVotacao> buscarTodas() {
 		log.info("Buscando todas as pautas");
 		return sessaoRepository.findAll();
 	}
 
-	@CacheEvict(value = "sessao")
+
 	@Transactional
 	public Optional<Pauta> buscaPorId(Long id) {
 		log.info("Buscando pauta por Id {}", id);
 		return pautaRepository.findById(id);
 	}
 
-	
-	@CacheEvict(value = "sessao", allEntries = true)
 	@Transactional
 	public SessaoVotacao criarSessao(SessaoRequestDTO dto) {
-		if (verificarExistenciaPauta(dto.getPautaID())) {
-			log.info("Pauta nao existe");
-			throw new NotFoundException("Pauta nao existe");
+		if (verificarExistenciaPauta(dto.getIdPauta())) {
+			log.info("Sessao ja iniciada");
+			throw new RuntimeException("Sessao ja iniciada");
 		}
+		Pauta pauta = pautaService.buscarPautaPeloID(dto.getIdPauta());
+		System.out.println(pauta.getNome());
 
-		SessaoVotacao sessaoVotacao = SessaoVotacao.builder().duracao(tempoFechado(dto.getDuracao()))
-				.idPauta(buscarPauta(dto)).build();
+		SessaoVotacao sessaoVotacao = SessaoVotacao.builder()
+				.duracao(tempoFechado(dto.getDuracao()))
+				.pauta(pauta).build();
 		log.info("Salvando Pauta");
 		return sessaoRepository.save(sessaoVotacao);
 	}
@@ -83,20 +83,18 @@ public class SessaoService {
 		return Objects.isNull(duracao) ? 60 : duracao;
 	}
 
-	@CacheEvict(value = "sessao")
 	@Transactional
-	private Pauta buscarPauta(SessaoRequestDTO dto) {
-		return pautaRepository.findById(dto.getPautaID())
+	private Pauta buscarPauta(Long idPauta) {
+		return pautaRepository.findById(idPauta)
 				.orElseThrow(() -> new NotFoundException("Pauta nao encontrada"));
 	}
 
-	@CacheEvict(value = "sessao")
 	@Transactional
 	public SessaoVotacao iniciarVotacao(SessaoStartRequestDTO dto) {
 		SessaoVotacao sessaoVotacao = sessaoRepository.findById(dto.getSessaoId())
 				.orElseThrow(() -> new NotFoundException("Sessao votacao nao encontrada"));
 
-		if (sessaoVotacao.getIdPauta()
+		if (sessaoVotacao.getPauta()
 				.getStatus()
 				.equals(StatusEnum.valueOf("FECHADA"))) {
 			throw new RuntimeException("A pauta esta FECHADA");
@@ -108,20 +106,20 @@ public class SessaoService {
 		return sessaoRepository.save(sessaoVotacao);
 	}
 
-	//@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 5000)
 	@Transactional
 	public void fecharSessao() {
 		List<SessaoVotacao> listSessaoVotacao = obterVotacaoExpiradaMasNaoFechada();
 
 		listSessaoVotacao.forEach(votacao -> {
 			log.info("Estatisticas da sessao");
-			votacao.getIdPauta().setQtdVotos(votacao.getVotos().size());
-			votacao.getIdPauta().setQtdVotosSim(qtSim(votacao));
-			votacao.getIdPauta().setQtdVotosNao(qtNao(votacao));
+			votacao.getPauta().setQtdVotos(votacao.getVotos().size());
+			votacao.getPauta().setQtdVotosSim(qtSim(votacao));
+			votacao.getPauta().setQtdVotosNao(qtNao(votacao));
 			sessaoRepository.save(votacao);
-			pautaService.mudancaStatus(votacao.getIdPauta());
-			pautaService.definirPercentual(votacao.getIdPauta());
-			pautaService.definirVencedor(votacao.getIdPauta());
+			pautaService.mudancaStatus(votacao.getPauta());
+			pautaService.definirPercentual(votacao.getPauta());
+			pautaService.definirVencedor(votacao.getPauta());
 		});
 	}
 

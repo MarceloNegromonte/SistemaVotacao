@@ -44,14 +44,14 @@ public class SessaoController {
 		return new ResponseEntity(sessaoService.buscaPorId(id), HttpStatus.OK);
 	}
 	
-	@GetMapping("/todas")
+	@GetMapping
 	public ResponseEntity<List<SessaoVotacao>> buscarTodas() {
 		log.info("Buscando todas sessoes");
 		return new ResponseEntity<>(sessaoService.buscarTodas(), HttpStatus.OK);
 	}
 	
 	@PostMapping("/criar")
-	public ResponseEntity<SessaoVotacao> criarSessao(@Valid @RequestBody SessaoRequestDTO dto) {
+	public ResponseEntity<SessaoVotacao> criar(@Valid @RequestBody SessaoRequestDTO dto) {
 		log.info("Criando sessao Votacao");
 		return new ResponseEntity<>(sessaoService.criarSessao(dto), HttpStatus.CREATED);
 	}

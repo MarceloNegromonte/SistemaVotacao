@@ -31,6 +31,7 @@ public class UsuarioController {
 	@Autowired
 	public UsuarioService usuarioService;
 	
+
 	@GetMapping("/{id}")
 	@Transactional
 	public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
@@ -38,16 +39,16 @@ public class UsuarioController {
 		return new ResponseEntity<>(usuarioService.buscarPorId(id), HttpStatus.OK);
 	}
 	
-    @GetMapping
+    @GetMapping("/nome")
     @Transactional
-    public ResponseEntity<Usuario> buscarPorNome(@RequestParam String name){
+    public ResponseEntity<Usuario> buscarPorNome(@RequestParam String nome){
     	log.info("Buscando por nome");
-        return new ResponseEntity<>(usuarioService.buscarPorNome(name), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.buscarPorNome(nome), HttpStatus.OK);
     }
 	
     @PostMapping("/criar")
     @Transactional
-    public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> criar(@Valid @RequestBody Usuario usuario){
         log.info("Criando usuario");
     	return new ResponseEntity(usuarioService.criarUsuario(usuario), HttpStatus.CREATED);
     }

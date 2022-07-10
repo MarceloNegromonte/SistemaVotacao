@@ -1,7 +1,5 @@
 package com.apisistemaVotacao.sistemaVotacao.dto.request;
 
-import java.time.LocalDateTime;
-
 //import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class SessaoRequestDTO {
 
-	private Long pautaID;
+	private Long idPauta;
 	
 	private Integer duracao;
 }

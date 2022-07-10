@@ -48,7 +48,7 @@ public class SessaoVotacao extends DataPauta {
 	
 	@OneToOne
 	@JoinColumn(name = "id_pauta")
-	private Pauta idPauta;
+	private Pauta pauta;
 
 	@JsonIgnoreProperties("sessaoVotacao")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sessaoVotacao", cascade = CascadeType.ALL)
@@ -59,7 +59,7 @@ public class SessaoVotacao extends DataPauta {
 	}
 	
 	public boolean aberta() {
-		return getIdPauta().getStatus().equals(StatusEnum.valueOf("ABERTA"));
+		return getPauta().getStatus().equals(StatusEnum.valueOf("ABERTA"));
 	}
 	 
 }

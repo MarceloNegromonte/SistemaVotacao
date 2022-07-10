@@ -4,8 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 public enum TipoEnum implements GrantedAuthority {
 
-	ADMIN("Usuario tipo Administrador"), 
-	COPERADO("Usuario tipo Coperado");
+	ROLE_ADMIN("Usuario tipo Administrador"), 
+	ROLE_COPERADO("Usuario tipo Coperado");
 	
 	private final String label;
 

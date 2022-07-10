@@ -45,4 +45,9 @@ public class Voto extends DataPauta {
     @JsonIgnoreProperties("votos")
     @JoinColumn(name = "id_sessao_votacao")
     private SessaoVotacao sessaoVotacao;
+    
+    @ManyToOne
+    @JsonIgnoreProperties("votos")
+    @JoinColumn(name = "fk_idUsuario")
+    private Usuario usuario;
 }

@@ -10,23 +10,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.apisistemaVotacao.sistemaVotacao.model.Usuario;
-import com.apisistemaVotacao.sistemaVotacao.model.enums.TipoEnum;
 import com.apisistemaVotacao.sistemaVotacao.repository.UsuarioRepository;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfigurations {
 
-    String ROLE_ADMIN = "ADMIN";
-    String ROLE_COOPERATE = "COOPERATE";
+    String ROlE_ADMIN = "ADMIN";
+    String ROLE_COPERADO = "COPERADO";
 	
     @Autowired
     private TokenService tokenService;
@@ -49,31 +45,22 @@ public class SecurityConfigurations {
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
-	
-    public InMemoryUserDetailsManager userDetailsService(){
-        UserDetails usuario = Usuario.builder()
-                .email("admin")
-                .senha(encoder().encode("admin"))
-                .tipo(TipoEnum.ADMIN).build();
-
-        return new InMemoryUserDetailsManager(usuario);
-    }
     
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        .antMatchers(HttpMethod.GET, "/v1/pauta/*").permitAll()
-        .antMatchers(HttpMethod.POST,"/v1/pauta/criarPauta").hasRole("ADMIN")
+        .antMatchers(HttpMethod.GET, "/v1/pauta/**").permitAll()
+        .antMatchers(HttpMethod.POST,"/v1/pauta/criarPauta").hasRole(ROlE_ADMIN)
         
-        .antMatchers(HttpMethod.GET, "/v1/sessao/*").permitAll()
-        .antMatchers(HttpMethod.POST,"/v1/sessao/*").hasRole("ADMIN")
+        .antMatchers(HttpMethod.GET, "/v1/sessao/**").permitAll()
+        .antMatchers(HttpMethod.POST,"/v1/sessao/**").hasRole(ROlE_ADMIN)
         
         .antMatchers(HttpMethod.POST, "/v1/voto/voto").permitAll()
         
         .antMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
         
         .antMatchers(HttpMethod.POST, "/v1/usuario/criar").permitAll()
-        .antMatchers(HttpMethod.GET, "/v1/usuario/*").hasRole("ADMIN")
+        .antMatchers(HttpMethod.GET, "/v1/usuario/**").hasRole(ROlE_ADMIN)
 
         .anyRequest().authenticated()
         .and().csrf().disable()

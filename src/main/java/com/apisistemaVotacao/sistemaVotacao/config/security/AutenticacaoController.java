@@ -26,7 +26,7 @@ public class AutenticacaoController {
 	@Autowired
 	private TokenService tokenService;
 	
-	@PostMapping("login")
+	@PostMapping("/login")
 	public ResponseEntity<TokenDTO> autenticar(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 		

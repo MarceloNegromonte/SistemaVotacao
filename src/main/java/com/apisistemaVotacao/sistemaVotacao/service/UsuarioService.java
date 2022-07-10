@@ -30,19 +30,16 @@ public class UsuarioService {
 		this.usuarioRepository = usuarioRepository;
 	}
 	
-	@CacheEvict(value = "usuario")
 	public Usuario buscarPorId(Long id) {
 		log.info("Buscando por id {}", id);
 		return usuarioRepository.findById(id).orElse(null);
 	}
 
-	@CacheEvict(value = "usuario")
 	public Usuario buscarPorNome(String nome) {
 		log.info("Buscando por nome {}", nome);
 		return usuarioRepository.findByNome(nome).orElse(null);
 	}
 	 
-	@CacheEvict(value = "usuario", allEntries = true)
 	public Optional<Usuario> criarUsuario(Usuario usuario) {
 		if (usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
 			log.error("CPF ja cadastrado {}", usuario.getCpf());
@@ -94,6 +91,11 @@ public class UsuarioService {
 		BCryptPasswordEncoder enconder = new BCryptPasswordEncoder();
 		String passwordEncoder = enconder.encode(password);
 		return passwordEncoder;
+	}
+	
+	public Usuario buscarPorCPF(String cpf) {
+		log.info("Buscando por CPF");
+		return usuarioRepository.findByCpf(cpf).orElse(null);
 	}
 
 }
