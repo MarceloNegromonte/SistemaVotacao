@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.apisistemaVotacao.sistemaVotacao.model.Pauta;

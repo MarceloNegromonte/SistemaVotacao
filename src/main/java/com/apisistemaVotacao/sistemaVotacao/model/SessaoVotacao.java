@@ -54,12 +54,12 @@ public class SessaoVotacao extends DataPauta {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sessaoVotacao", cascade = CascadeType.ALL)
 	private List<Voto> votos = new ArrayList<>();
 	
-	public boolean fechada() {
-		return this.getFechado() != null && this.getFechado().isBefore(Instant.now());
-	}
-	
 	public boolean aberta() {
 		return getPauta().getStatus().equals(StatusEnum.valueOf("ABERTA"));
+	}
+	
+	public boolean fechada() {
+		return this.getFechado() != null && this.getFechado().isBefore(Instant.now());
 	}
 	 
 }

@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.apisistemaVotacao.sistemaVotacao.model.dataPauta.DataPauta;
@@ -36,10 +37,12 @@ public class Pauta extends DataPauta{
 
 	@Column(name = "Nome")
 	@Size(min = 3)
+	@NotNull(message = "Nome da pauta nao pode ser nulo")
 	private String nome;
 
 	@Column(name = "Descricao")
 	@Size(min = 3)
+	@NotNull(message = "Descricao da pauta nao pode ser nulo")
 	private String descricao;
 	
 	@Column(name = "Status")

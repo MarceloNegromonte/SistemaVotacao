@@ -31,18 +31,17 @@ public class UsuarioController {
 	@Autowired
 	public UsuarioService usuarioService;
 	
-
 	@GetMapping("/{id}")
 	@Transactional
 	public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
-		log.info("Buscando usuario por Id");
+		log.info("Buscando usuario por Id {}", id);
 		return new ResponseEntity<>(usuarioService.buscarPorId(id), HttpStatus.OK);
 	}
 	
     @GetMapping("/nome")
     @Transactional
     public ResponseEntity<Usuario> buscarPorNome(@RequestParam String nome){
-    	log.info("Buscando por nome");
+    	log.info("Buscando por nome {}", nome);
         return new ResponseEntity<>(usuarioService.buscarPorNome(nome), HttpStatus.OK);
     }
 	
@@ -56,7 +55,7 @@ public class UsuarioController {
 	@PutMapping("/atualizar")
 	@Transactional
     public ResponseEntity<Usuario> atualizar(@Valid @RequestBody Usuario usuario){
-        log.info("Atualizando usuario");
+        log.info("Atualizando usuario de CPF {}", usuario.getCpf());
 		return new ResponseEntity<>(usuarioService.atualizarUsuario(usuario), HttpStatus.OK);
     }
 

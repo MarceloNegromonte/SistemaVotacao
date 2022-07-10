@@ -21,7 +21,7 @@ import com.apisistemaVotacao.sistemaVotacao.repository.UsuarioRepository;
 @Configuration
 public class SecurityConfigurations {
 
-    String ROlE_ADMIN = "ADMIN";
+    String ROLE_ADMIN = "ADMIN";
     String ROLE_COPERADO = "COPERADO";
 	
     @Autowired
@@ -49,19 +49,10 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        .antMatchers(HttpMethod.GET, "/v1/pauta/**").permitAll()
-        .antMatchers(HttpMethod.POST,"/v1/pauta/criarPauta").hasRole(ROlE_ADMIN)
-        
-        .antMatchers(HttpMethod.GET, "/v1/sessao/**").permitAll()
-        .antMatchers(HttpMethod.POST,"/v1/sessao/**").hasRole(ROlE_ADMIN)
-        
         .antMatchers(HttpMethod.POST, "/v1/voto/voto").permitAll()
-        
         .antMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
-        
         .antMatchers(HttpMethod.POST, "/v1/usuario/criar").permitAll()
-        .antMatchers(HttpMethod.GET, "/v1/usuario/**").hasRole(ROlE_ADMIN)
-
+        .antMatchers("/v1/**").hasRole(ROLE_ADMIN)
         .anyRequest().authenticated()
         .and().csrf().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
