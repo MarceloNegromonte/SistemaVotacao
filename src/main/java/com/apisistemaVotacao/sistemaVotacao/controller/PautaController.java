@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,6 +38,7 @@ public class PautaController {
 	}
 	
 	@GetMapping
+	@Cacheable(value = "ListaDePautas")
 	public ResponseEntity<List<Pauta>> buscarTodasPautas() {
 		log.info("Buscando todas as pautas");
 
@@ -49,6 +52,7 @@ public class PautaController {
     }
 
 	@PostMapping("/criar")
+	@CacheEvict(value = "ListaDePautas", allEntries = true)
 	public ResponseEntity<Pauta> criarPauta(@Valid @RequestBody Pauta pauta) {
 		log.info("Criando Pauta");
 		return new ResponseEntity<>(pautaService.criarPauta(pauta), HttpStatus.CREATED);
