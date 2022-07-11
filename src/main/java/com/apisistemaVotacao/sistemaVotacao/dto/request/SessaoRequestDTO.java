@@ -1,6 +1,5 @@
 package com.apisistemaVotacao.sistemaVotacao.dto.request;
 
-//import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

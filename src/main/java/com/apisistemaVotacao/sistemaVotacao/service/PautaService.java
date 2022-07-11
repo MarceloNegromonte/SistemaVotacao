@@ -41,14 +41,14 @@ public class PautaService {
 	@Transactional
 	public Pauta criarPauta(Pauta estado) {
 		estado.setStatus(StatusEnum.ABERTA);
-		log.info("Salvando pauta");
+		log.info("Abrindo Pauta");
 		return pautaRepository.save(estado);
 	}
 	
 	@Transactional
 	public void mudancaStatus(Pauta estado) {
 		estado.setStatus(StatusEnum.FECHADA);
-		log.info("Salvando mudanca de pauta");
+		log.info("Fechando Pauta");
 		pautaRepository.save(estado);
 	}
 	

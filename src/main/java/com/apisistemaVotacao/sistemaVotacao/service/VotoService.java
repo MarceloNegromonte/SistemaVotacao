@@ -27,16 +27,12 @@ public class VotoService {
  	private SessaoVotacaoRepository sessaoVotacaoRepository;
 	
 	@Autowired
-	private SessaoService sessaoService;
-	
-	@Autowired
 	private UsuarioService usuarioService;
 	
 	@Autowired
-    public VotoService(VotoRepository votoRepository, SessaoVotacaoRepository sessaoVotacaoRepository, SessaoService sessaoService, UsuarioService usuarioService) {
+    public VotoService(VotoRepository votoRepository, SessaoVotacaoRepository sessaoVotacaoRepository, UsuarioService usuarioService) {
         this.votoRepository = votoRepository;
         this.sessaoVotacaoRepository = sessaoVotacaoRepository;
-        this.sessaoService = sessaoService;
         this.usuarioService = usuarioService;
     }
 	
@@ -82,5 +78,3 @@ public class VotoService {
 	}
     
 }
-
-

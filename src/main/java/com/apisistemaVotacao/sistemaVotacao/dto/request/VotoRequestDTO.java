@@ -14,10 +14,10 @@ public class VotoRequestDTO {
 	@NotNull
 	private Long sessaoVotacaoId;
 	
-    @NotNull(message = "Mensagem de voto é obrigatório e precisa seguir o padrão: SIM/NAO")
+    @NotNull(message = "Voto é obrigatório e precisa seguir o padrão: SIM/NAO")
     @Enumerated
     private VotoStatus voto;
     
-    @NotNull
+    @NotNull(message = "CPF obrigatorio")
     private String cpf;
 }

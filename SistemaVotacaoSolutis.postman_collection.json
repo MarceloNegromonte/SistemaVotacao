@@ -1,0 +1,348 @@
+{
+	"info": {
+		"_postman_id": "c54dddfa-0228-493f-8e85-e57fd02ff533",
+		"name": "SistemaVotacaoSolutis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17532953"
+	},
+	"item": [
+		{
+			"name": "Criar Usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\" : \"admin2\",\r\n    \"cpf\" : \"12345678911\",\r\n    \"tipo\" : \"ROLE_ADMIN\",\r\n    \"email\" : \"admin2@email.com\",\r\n    \"senha\" : \"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{gateway}}usuario/criar",
+					"host": [
+						"{{gateway}}usuario"
+					],
+					"path": [
+						"criar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Usuario",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"admin@email.com\",\r\n    \"senha\" : \"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{gateway}}auth/login",
+					"host": [
+						"{{gateway}}auth"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Usuario por ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{gateway}}usuario/",
+					"host": [
+						"{{gateway}}usuario"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar Usuario",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{gateway}}usuario/",
+					"host": [
+						"{{gateway}}usuario"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Pauta",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\" : \"pauta teste\",\r\n    \"descricao\" : \"pauta teste\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{gateway}}pauta/criar",
+					"host": [
+						"{{gateway}}pauta"
+					],
+					"path": [
+						"criar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Pautas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gateway}}pauta",
+					"host": [
+						"{{gateway}}pauta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Pauta por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gateway}}pauta/",
+					"host": [
+						"{{gateway}}pauta"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Sessao",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{gateway}}sessao/criar",
+					"host": [
+						"{{gateway}}sessao"
+					],
+					"path": [
+						"criar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Iniciar Sessao",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sessaoId\" : \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{gateway}}sessao/iniciar",
+					"host": [
+						"{{gateway}}sessao"
+					],
+					"path": [
+						"iniciar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Todas As Sessoes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gateway}}sessao",
+					"host": [
+						"{{gateway}}sessao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Sessoes Por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gateway}}sessao/",
+					"host": [
+						"{{gateway}}sessao"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Votar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sessaoVotacaoId\" : \"3\",\r\n    \"voto\" : \"NAO\",\r\n    \"cpf\" : \"12345678920\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{gateway}}voto/voto",
+					"host": [
+						"{{gateway}}voto"
+					],
+					"path": [
+						"voto"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authorization}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const echoPostRequest = {",
+					"    url: pm.variables.get('gateway') + \"auth/login\",",
+					"    method: 'POST',",
+					"    header: {",
+					"        'content-type': 'application/json'",
+					"    },",
+					"    body: {",
+					"        mode: 'raw',",
+					"        raw: JSON.stringify(",
+					"                    { ",
+					"                        email : pm.variables.get('loginemail'), ",
+					"                        senha : pm.variables.get('loginpassword') ",
+					"                    }",
+					"        )",
+					"    }",
+					"};",
+					"",
+					"pm.sendRequest(echoPostRequest, function (err, res) {",
+					"    const json = res.json()",
+					"    pm.variables.set(\"authorization\", json.token);",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway",
+			"value": "http://localhost:8080/v1/",
+			"type": "string"
+		},
+		{
+			"key": "authorization",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "loginemail",
+			"value": "admin@email.com",
+			"type": "string"
+		},
+		{
+			"key": "loginpassword",
+			"value": "12345",
+			"type": "string"
+		}
+	]
+}
