@@ -54,7 +54,7 @@ public class SessaoController {
 	}
 	
 	@PostMapping("/criar")
-	@CacheEvict(value = "ListaDePautas", allEntries = true)
+	@CacheEvict(value = "ListaDeSessoes", allEntries = true)
 	public ResponseEntity<SessaoVotacao> criar(@Valid @RequestBody SessaoRequestDTO dto) {
 		log.info("Criando sessao Votacao");
 		return new ResponseEntity<>(sessaoService.criarSessao(dto), HttpStatus.CREATED);

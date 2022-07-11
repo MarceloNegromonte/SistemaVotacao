@@ -52,6 +52,8 @@ public class SecurityConfigurations {
         .antMatchers(HttpMethod.POST, "/v1/voto/voto").permitAll()
         .antMatchers(HttpMethod.POST, "/v1/auth/login").permitAll()
         .antMatchers(HttpMethod.POST, "/v1/usuario/criar").permitAll()
+        .antMatchers("/swagger-ui/#/").permitAll()
+        .antMatchers("/swagger-resources/**").permitAll()
         .antMatchers("swagger-ui.html").permitAll()
         .antMatchers("/v1/**").hasRole(ROLE_ADMIN)
         .anyRequest().authenticated()
