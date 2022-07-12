@@ -8,8 +8,13 @@
 Clone o repositório: 
 - https://github.com/MarceloNegromonte/SistemaVotacao.git
 
-na pasta clonada abra o terminal e rode o docker compose:
+Se caso estiver rodando no seu computador o mysql, vá em serviços e pare a aplicação.
+
+Depois na pasta clonada abra o terminal e rode o comando docker:
 - docker compose up
+
+Depois volte a rodar o mysql.
+
 OBS: na IDE de sua escolha, rode o projeto.
 
 # Acesso das principais funções: 
