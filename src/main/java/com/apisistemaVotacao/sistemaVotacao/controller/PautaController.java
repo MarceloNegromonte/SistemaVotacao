@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apisistemaVotacao.sistemaVotacao.model.Pauta;
-import com.apisistemaVotacao.sistemaVotacao.repository.PautaRepository;
 import com.apisistemaVotacao.sistemaVotacao.service.PautaService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class PautaController {
 	private PautaService pautaService;
 
 	@Autowired
-	public PautaController(PautaService pautaService, PautaRepository pautaRepository) {
+	public PautaController(PautaService pautaService) {
 		this.pautaService = pautaService;
 	}
 	

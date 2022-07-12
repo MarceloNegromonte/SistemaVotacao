@@ -49,10 +49,9 @@ public class SessaoService {
 	
 	@Transactional
 	public List<SessaoVotacao> buscarTodas() {
-		log.info("Buscando todas as pautas");
+		log.info("Buscando todas as sessoes");
 		return sessaoRepository.findAll();
 	}
-
 
 	@Transactional
 	public Optional<Pauta> buscaPorId(Long id) {
