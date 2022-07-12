@@ -44,11 +44,10 @@ public class SessaoService {
 	@Transactional
 	private boolean verificarExistenciaPauta(Long idPauta) {
 		log.info("Verificando se a pauta {} existe", idPauta);
-		System.out.println("verificando existencia");
 		return sessaoRepository.existsByPautaId(idPauta);
 	}
 	
-	@Transactional()
+	@Transactional
 	public List<SessaoVotacao> buscarTodas() {
 		log.info("Buscando todas as pautas");
 		return sessaoRepository.findAll();
@@ -64,16 +63,15 @@ public class SessaoService {
 	@Transactional
 	public SessaoVotacao criarSessao(SessaoRequestDTO dto) {
 		if (verificarExistenciaPauta(dto.getIdPauta())) {
-			log.info("Sessao ja iniciada");
-			throw new RuntimeException("Sessao ja iniciada");
+			log.info("Sessao ja criada");
+			throw new RuntimeException("Sessao ja criada");
 		}
 		Pauta pauta = pautaService.buscarPautaPeloID(dto.getIdPauta());
-		System.out.println(pauta.getNome());
 
 		SessaoVotacao sessaoVotacao = SessaoVotacao.builder()
 				.duracao(tempoFechado(dto.getDuracao()))
 				.pauta(pauta).build();
-		log.info("Salvando Pauta");
+		log.info("Criando sessao");
 		return sessaoRepository.save(sessaoVotacao);
 	}
 
@@ -106,12 +104,12 @@ public class SessaoService {
 		return sessaoRepository.save(sessaoVotacao);
 	}
 
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 60000)
 	@Transactional
 	public void fecharSessao() {
-		List<SessaoVotacao> listSessaoVotacao = obterVotacaoExpiradaMasNaoFechada();
+		List<SessaoVotacao> listaSessaoVotacao = obterVotacaoExpiradaMasNaoFechada();
 
-		listSessaoVotacao.forEach(votacao -> {
+		listaSessaoVotacao.forEach(votacao -> {
 			log.info("Estatisticas da sessao");
 			votacao.getPauta().setQtdVotos(votacao.getVotos().size());
 			votacao.getPauta().setQtdVotosSim(qtSim(votacao));
@@ -136,7 +134,11 @@ public class SessaoService {
 	@Transactional
 	public Integer qtNao(SessaoVotacao sessaoVotacao) {
 		return Math.toIntExact(
-				sessaoVotacao.getVotos().stream().filter(c -> c.getVoto().equals(VotoStatus.valueOf("NAO"))).count());
+				sessaoVotacao.getVotos()
+				.stream()
+				.filter(c -> c.getVoto()
+				.equals(VotoStatus.valueOf("NAO")))
+				.count());
 	}
 
 	@Transactional

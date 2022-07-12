@@ -33,7 +33,7 @@ public class CpfService {
                 .isValid(true)
                 .build();
 
-        log.info("The service cannot be queried");
+        log.info("O servico nao pode ser consultado");
         return cpfDto.getIsValid();
     }
 }
