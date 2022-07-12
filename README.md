@@ -24,7 +24,7 @@ Login e senha mysql:
 
 Usuário em memória no banco:
 - usuario: admin@email.com
-- senha: admin123
+- senha: 12345
 
 # Link Swagger:
 - http://localhost:8080/swagger-ui/index.html
