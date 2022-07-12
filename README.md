@@ -27,6 +27,24 @@ Usuário em memória no banco:
 - usuario: admin@email.com
 - senha: 12345
 
+- usuario: admin2@email.com
+- senha: 12345
+
+- usuario: admin3@email.com
+- senha: 12345
+
+- usuario: coperado@email.com
+- senha: 12345
+
+- usuario: coperado2@email.com
+- senha: 12345
+
+- usuario: coperado3@email.com
+- senha: 12345
+
+- usuario: coperado4@email.com
+- senha: 12345
+
 # Link Swagger:
 - http://localhost:8080/swagger-ui/index.html
 
