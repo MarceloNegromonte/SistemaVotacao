@@ -22,6 +22,10 @@ Login e senha mysql:
 - Login: root
 - Senha: root
 
+Usuário em memória no banco:
+- usuario: admin@email.com
+- senha: admin123
+
 # Link Swagger:
 - http://localhost:8080/swagger-ui/index.html
 
