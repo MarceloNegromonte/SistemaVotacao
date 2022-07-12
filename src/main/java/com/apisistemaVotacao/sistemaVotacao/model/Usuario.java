@@ -51,7 +51,7 @@ public class Usuario extends DataPauta implements UserDetails {
 	@Size(min = 2, max = 100)
 	private String nome;
 	
-	@Column(name = "Cpf")
+	@Column(name = "Cpf", unique = true)
 	@NotNull(message = "Insira somente os numeros")
 	private String cpf;
 	
