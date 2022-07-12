@@ -3,6 +3,7 @@
 # Pré-Requisitos:
 - Java 11+
 - Docker
+- Lombok
 
 # Instalação:
 Clone o repositório: 
